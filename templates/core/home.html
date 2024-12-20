@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="jumbotron text-center py-5 bg-light mb-4">
+    <h1 class="display-4">Bem-vindo ao CCT EAD</h1>
+    <p class="lead">Aprenda no seu próprio ritmo com nossos cursos online de alta qualidade.</p>
+    <a href="{% url 'courses:course_list' %}" class="btn btn-primary btn-lg">Explorar Cursos</a>
+</div>
+
+<section class="mb-5">
+    <h2 class="text-center mb-4">Cursos em Destaque</h2>
+    <div class="row">
+        {% for course in featured_courses %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    {% if course.thumbnail %}
+                        <img src="{{ course.thumbnail.url }}" class="card-img-top" alt="{{ course.title }}">
+                    {% else %}
+                        <img src="{% static 'images/default-course.jpg' %}" class="card-img-top" alt="{{ course.title }}">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ course.title }}</h5>
+                        <p class="card-text">{{ course.description|truncatewords:20 }}</p>
+                        <a href="{% url 'courses:course_detail' course.slug %}" class="btn btn-primary">Saiba mais</a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <p class="text-center">Nenhum curso em destaque no momento.</p>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="mb-5">
+    <h2 class="text-center mb-4">Categorias</h2>
+    <div class="row justify-content-center">
+        {% for category in categories %}
+            <div class="col-md-3 mb-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ category.name }}</h5>
+                        <p class="card-text">{{ category.description|truncatewords:10 }}</p>
+                        <a href="{% url 'courses:course_list' %}?categoria={{ category.name }}" class="btn btn-outline-primary">Ver Cursos</a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <p class="text-center">Nenhuma categoria disponível.</p>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="bg-light py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Por que escolher o CCT EAD?</h2>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="text-center">
+                    <i class="fas fa-laptop fa-3x mb-3"></i>
+                    <h4>Flexibilidade</h4>
+                    <p>Estude no seu próprio ritmo, de qualquer lugar</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="text-center">
+                    <i class="fas fa-chalkboard-teacher fa-3x mb-3"></i>
+                    <h4>Professores Qualificados</h4>
+                    <p>Aprenda com os melhores profissionais da área</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="text-center">
+                    <i class="fas fa-certificate fa-3x mb-3"></i>
+                    <h4>Certificado</h4>
+                    <p>Receba certificado ao concluir os cursos</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

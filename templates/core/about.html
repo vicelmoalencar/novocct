@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}Sobre - CCT EAD{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <h1 class="text-center mb-4">Sobre o CCT EAD</h1>
+            
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="card-title">Nossa Missão</h2>
+                    <p class="card-text">
+                        Proporcionar educação de qualidade e acessível a todos, através de uma plataforma moderna
+                        e intuitiva de ensino a distância. Nosso compromisso é com a transformação da vida das
+                        pessoas através do conhecimento.
+                    </p>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="card-title">Nossa Visão</h2>
+                    <p class="card-text">
+                        Ser referência nacional em educação a distância, reconhecida pela qualidade dos cursos,
+                        inovação tecnológica e impacto positivo na vida dos alunos.
+                    </p>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="card-title">Nossos Valores</h2>
+                    <ul class="list-unstyled">
+                        <li class="mb-3">
+                            <h5>🎯 Excelência</h5>
+                            <p>Comprometimento com a qualidade em tudo o que fazemos.</p>
+                        </li>
+                        <li class="mb-3">
+                            <h5>🤝 Acessibilidade</h5>
+                            <p>Educação de qualidade acessível a todos.</p>
+                        </li>
+                        <li class="mb-3">
+                            <h5>💡 Inovação</h5>
+                            <p>Busca constante por novas tecnologias e métodos de ensino.</p>
+                        </li>
+                        <li class="mb-3">
+                            <h5>🌟 Compromisso</h5>
+                            <p>Dedicação ao sucesso e desenvolvimento dos nossos alunos.</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <a href="{% url 'courses:course_list' %}" class="btn btn-primary btn-lg">Conheça Nossos Cursos</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

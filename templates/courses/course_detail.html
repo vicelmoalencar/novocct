@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ course.title }} - CCT EAD{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card mb-4">
+                {% if course.thumbnail %}
+                    <img src="{{ course.thumbnail.url }}" class="card-img-top" alt="{{ course.title }}">
+                {% else %}
+                    <img src="{% static 'images/default-course.jpg' %}" class="card-img-top" alt="{{ course.title }}">
+                {% endif %}
+                <div class="card-body">
+                    <h1 class="card-title">{{ course.title }}</h1>
+                    <p class="text-muted">
+                        <small>
+                            Instrutor: {{ course.instructor.get_full_name|default:course.instructor.username }} |
+                            Categoria: {{ course.category.name }}
+                        </small>
+                    </p>
+                    <div class="course-description">
+                        {{ course.description|safe }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Conteúdo do Curso</h2>
+                    <div class="accordion" id="courseModules">
+                        {% for module in course.modules.all %}
+                            <div class="accordion-item">
+                                <h3 class="accordion-header" id="module{{ module.id }}">
+                                    <button class="accordion-button {% if not forloop.first %}collapsed{% endif %}" 
+                                            type="button" 
+                                            data-bs-toggle="collapse" 
+                                            data-bs-target="#moduleContent{{ module.id }}">
+                                        {{ module.title }}
+                                    </button>
+                                </h3>
+                                <div id="moduleContent{{ module.id }}" 
+                                     class="accordion-collapse collapse {% if forloop.first %}show{% endif %}" 
+                                     data-bs-parent="#courseModules">
+                                    <div class="accordion-body">
+                                        <p>{{ module.description }}</p>
+                                        <ul class="list-group">
+                                            {% for lesson in module.lessons.all %}
+                                                <li class="list-group-item">
+                                                    {% if is_enrolled %}
+                                                        <a href="{% url 'courses:lesson_detail' course.slug lesson.id %}">
+                                                            {{ lesson.title }}
+                                                        </a>
+                                                    {% else %}
+                                                        {{ lesson.title }}
+                                                    {% endif %}
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h3 class="card-title">Informações do Curso</h3>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <i class="fas fa-book"></i>
+                            {{ course.modules.count }} módulos
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-clock"></i>
+                            {{ course.modules.all|length }} aulas
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-users"></i>
+                            {{ course.students.count }} alunos matriculados
+                        </li>
+                    </ul>
+
+                    {% if is_enrolled %}
+                        <a href="{% url 'courses:lesson_detail' course.slug course.modules.first.lessons.first.id %}" 
+                           class="btn btn-success btn-lg w-100">
+                            Continuar Curso
+                        </a>
+                    {% else %}
+                        <form method="post" action="{% url 'courses:enroll_course' course.slug %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary btn-lg w-100">Matricular-se</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if course.instructor.bio %}
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">Sobre o Instrutor</h3>
+                        <div class="text-center mb-3">
+                            {% if course.instructor.profile_picture %}
+                                <img src="{{ course.instructor.profile_picture.url }}" 
+                                     class="rounded-circle" 
+                                     alt="{{ course.instructor.get_full_name }}"
+                                     style="width: 100px; height: 100px; object-fit: cover;">
+                            {% endif %}
+                        </div>
+                        <h4 class="text-center">{{ course.instructor.get_full_name }}</h4>
+                        <p>{{ course.instructor.bio }}</p>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
