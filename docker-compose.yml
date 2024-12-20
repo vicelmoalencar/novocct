@@ -6,6 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     restart: always
+    command: gunicorn --bind 0.0.0.0:3000 --workers 3 --timeout 120 --access-logfile - --error-logfile - cct.wsgi:application
     volumes:
       - .:/app
       - static_volume:/app/staticfiles
@@ -15,7 +16,7 @@ services:
     environment:
       - DJANGO_SETTINGS_MODULE=cct.settings
       - DJANGO_SECRET_KEY=django-insecure-5na2o8-+ri!1_#c*bg9js(*3)bg7g!p8)8=6(&%bhn0uu-17c3
-      - DJANGO_DEBUG=True
+      - DJANGO_DEBUG=False
       - POSTGRES_HOST=cct-db
       - POSTGRES_DB=cct
       - POSTGRES_USER=postgres
