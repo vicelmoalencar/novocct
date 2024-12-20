@@ -2,14 +2,17 @@ version: '3.8'
 
 services:
   web:
-    build: .
-    command: gunicorn cct.wsgi:application --bind 0.0.0.0:8000
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    command: gunicorn --bind 0.0.0.0:8000 cct.wsgi:application
     volumes:
       - .:/app
       - static_volume:/app/staticfiles
       - media_volume:/app/media
-    expose:
-      - 8000
+    ports:
+      - "8000:8000"
     environment:
       - DJANGO_SETTINGS_MODULE=cct.settings
       - DATABASE_URL=postgres://postgres:${DB_PASSWORD}@db:5432/cct
@@ -20,6 +23,7 @@ services:
 
   db:
     image: postgres:13
+    restart: always
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
@@ -29,6 +33,7 @@ services:
 
   nginx:
     image: nginx:1.21-alpine
+    restart: always
     volumes:
       - static_volume:/app/staticfiles
       - media_volume:/app/media
