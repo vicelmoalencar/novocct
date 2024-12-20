@@ -1,9 +1,9 @@
 # Use uma imagem base Python oficial
-FROM python:3.9-slim
+FROM python:3.9
 
 # Configurar variáveis de ambiente
-ENV PYTHONUNBUFFERED=1 \
-    PYTHONDONTWRITEBYTECODE=1 \
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
     DEBIAN_FRONTEND=noninteractive
 
 # Criar e definir o diretório de trabalho
@@ -24,10 +24,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Criar diretórios necessários
-RUN mkdir -p /app/media /app/static /app/staticfiles
+RUN mkdir -p /app/staticfiles /app/media
+RUN python manage.py collectstatic --noinput
 
 # Expor a porta
 EXPOSE 8000
 
 # Comando para iniciar o servidor
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "cct.wsgi:application"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "--timeout", "120", "cct.wsgi:application"]

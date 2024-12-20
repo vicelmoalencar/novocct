@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     restart: always
-    command: gunicorn --bind 0.0.0.0:8000 cct.wsgi:application
+    command: gunicorn --bind 0.0.0.0:8000 --workers 3 --timeout 120 cct.wsgi:application
     volumes:
       - .:/app
       - static_volume:/app/staticfiles
@@ -19,6 +19,7 @@ services:
       - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
       - DJANGO_DEBUG=False
       - POSTGRES_HOST=cct-db
+      - ALLOWED_HOSTS=docmost-cct-ead.0z1o5i.easypanel.host,localhost,127.0.0.1
     depends_on:
       - cct-db
 
