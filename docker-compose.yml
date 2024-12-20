@@ -11,8 +11,8 @@ services:
       - .:/app
       - static_volume:/app/staticfiles
       - media_volume:/app/media
-    ports:
-      - "3000:3000"
+    expose:
+      - 3000
     environment:
       - DJANGO_SETTINGS_MODULE=cct.settings
       - DJANGO_SECRET_KEY=django-insecure-5na2o8-+ri!1_#c*bg9js(*3)bg7g!p8)8=6(&%bhn0uu-17c3
@@ -24,6 +24,18 @@ services:
       - ALLOWED_HOSTS=docmost-cct-ead.0z1o5i.easypanel.host,localhost,127.0.0.1
     depends_on:
       - cct-db
+
+  nginx:
+    image: nginx:1.21-alpine
+    restart: always
+    volumes:
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+      - ./nginx:/etc/nginx/conf.d
+    ports:
+      - "80:80"
+    depends_on:
+      - web
 
   cct-db:
     container_name: cct-db
