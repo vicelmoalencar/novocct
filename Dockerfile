@@ -28,7 +28,7 @@ RUN mkdir -p /app/staticfiles /app/media
 RUN python manage.py collectstatic --noinput
 
 # Expor a porta
-EXPOSE 8000
+EXPOSE 3000
 
 # Comando para iniciar o servidor
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "--timeout", "120", "cct.wsgi:application"]
+CMD ["gunicorn", "--bind", "0.0.0.0:3000", "--workers", "3", "--timeout", "120", "cct.wsgi:application"]

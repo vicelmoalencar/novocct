@@ -6,13 +6,13 @@ services:
       context: .
       dockerfile: Dockerfile
     restart: always
-    command: gunicorn --bind 0.0.0.0:8000 --workers 3 --timeout 120 cct.wsgi:application
+    command: gunicorn --bind 0.0.0.0:3000 --workers 3 --timeout 120 cct.wsgi:application
     volumes:
       - .:/app
       - static_volume:/app/staticfiles
       - media_volume:/app/media
     ports:
-      - "8000:8000"
+      - "3000:3000"
     environment:
       - DJANGO_SETTINGS_MODULE=cct.settings
       - DATABASE_URL=postgres://postgres:${DB_PASSWORD}@cct-db:5432/cct
