@@ -15,13 +15,15 @@ services:
       - "8000:8000"
     environment:
       - DJANGO_SETTINGS_MODULE=cct.settings
-      - DATABASE_URL=postgres://postgres:${DB_PASSWORD}@db:5432/cct
+      - DATABASE_URL=postgres://postgres:${DB_PASSWORD}@cct-db:5432/cct
       - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
       - DJANGO_DEBUG=False
+      - POSTGRES_HOST=cct-db
     depends_on:
-      - db
+      - cct-db
 
-  db:
+  cct-db:
+    container_name: cct-db
     image: postgres:13
     restart: always
     volumes:
