@@ -26,6 +26,7 @@ COPY . .
 # Criar diretórios necessários
 RUN mkdir -p /app/staticfiles /app/media
 RUN python manage.py collectstatic --noinput
+RUN python manage.py migrate --noinput
 
 # Expor a porta
 EXPOSE 3000
