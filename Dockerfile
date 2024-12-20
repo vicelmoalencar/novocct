@@ -26,10 +26,16 @@ COPY . .
 # Criar diretórios necessários
 RUN mkdir -p /app/staticfiles /app/media
 RUN python manage.py collectstatic --noinput
-RUN python manage.py migrate --noinput
 
 # Expor a porta
 EXPOSE 3000
+
+# Copiar script de entrypoint
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# Definir entrypoint
+ENTRYPOINT ["/entrypoint.sh"]
 
 # Comando para iniciar o servidor
 CMD ["gunicorn", "--bind", "0.0.0.0:3000", "--workers", "3", "--timeout", "120", "cct.wsgi:application"]
